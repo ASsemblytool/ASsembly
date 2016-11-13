@@ -1,0 +1,49 @@
+ASimulator (v1.0): Simulation of Differential Alternative Splicing 
+Authors: Carmen Bravo, Carlos de Lannoy, Emma Houben
+Email: assemblytoolkuleuven@gmail.com
+Github: https://github.com/ASsemblytool/ASsembly
+
+#####################################################################################
+#### Paths
+#####################################################################################
+
+Define the paths for finding the corresponding element required by ASimulator:
+
+0. Master directory path.
+MASTERDIR=/Volumes/WINDOWS/Master_dir
+
+1. Path where the ASimulator scripts (python, suppa folder, flux-simulator folder) are found.
+FUNCTIONS=/Volumes/WINDOWS/Master_dir/ASimulator/src
+
+2. Path to save and retrieve the intermediary files.
+INT=/Volumes/WINDOWS/Master_dir/ASimulator/int
+
+3. Path to annotation folder
+ANNOT=/Volumes/WINDOWS/Master_dir/Annotation
+
+4. Path to the GFF annotation file.
+GFF_ANN=/Volumes/WINDOWS/Master_dir/Annotation/TAIR10_GFF3_genes.gff
+
+5. Path to the GTF annotation file. If not provided, the GTF file will be created in this
+path (-gtf).
+GTF_ANN=/Volumes/WINDOWS/Master_dir/Annotation/TAIR10_GTF_genes.gtf
+
+6. Path to the input bam files.
+BAM_FILES=/Volumes/WINDOWS/Master_dir/bam_files
+
+7. Path where the bam files containing only reads map to annotated alternatively spliced
+genes will be saved and retrieved.
+FILT_BAMFILES=/Volumes/WINDOWS/Master_dir/ASbam_files
+
+8. Path to the folder containing the reference genome in fasta format. Each file corresponds
+to a chromosome and the name must be consistent with the bam and annotation files 
+(e.g Chr1.fa contains the sequence of the first chromosome. In bam and annotation files,
+the chromosomal information is given as Chr1 for the first chromosome; the same for the rest).
+REF_FASTA=/Volumes/WINDOWS/Master_dir/RefGenome
+
+9. Path to the file containing flux-simulator parameters.
+FSPARA=/Volumes/WINDOWS/Master_dir/myPara.par
+
+10. Path to the simulated bam files (if GSNAP selected)
+SIMBAM=/Volumes/WINDOWS/Master_dir/SIMbam_files
+

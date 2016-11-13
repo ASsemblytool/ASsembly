@@ -1,0 +1,216 @@
+
+ASimulator (v1.0): Simulation of Differential Alternative Splicing 
+Authors: Carmen Bravo, Carlos de Lannoy, Emma Houben
+Email: assemblytoolkuleuven@gmail.com
+Github: https://github.com/ASsemblytool/ASsembly
+
+#####################################################################################
+#### 1. Introduction
+#####################################################################################
+
+ASimulator is a tool for simulating differential splicing between two given conditions. 
+These simulations can be used for testing the accuracy of differential splicing methods
+for finding certain alternative splicing event types (simple and complex) and novel isoforms;
+and checking their robustness against diffenrent isoform ratios between the samples, 
+quality of sequencing and number of replicates.
+
+ASimulator is part of ASsembly, a tool for the assembly of the results of several methods
+for detecting differential splicing. These methods tend to find different differential
+splicing events, with little overlap within their results. Some methods work well for 
+finding certain types of events but not others, and not all of them are good when novel 
+isoforms appear (Liu et al., 2014). ASsembly aims to unify this results and find high 
+confidence differential splicing events among them.
+
+Given the simulated files, ASsembly uses a GSEA approach to find high confidence thresholds
+(e.g. for specific event types or novel isoform discovery) for each method. The simulated 
+gene lists are used as reference gene sets against the ranked differentially spliced genes
+lists found by the methods. Methods are then run on the original data and these thresholds
+are used to identify how many of the differential spliced genes found can be trusted. 
+
+For example, if ASsembly finds that out of all the ranked Exon Skipping events identified by
+method A only 10% is highly reliable, only the first 10% of the ranked Exon Skipping events
+identified in the real data with this method will be considered as truly differential 
+Exon Skipping events. Integrating all the results for each method and event type, ASsembly
+aims to find highly accurate differential alternative splicing events between the given 
+conditions.
+
+Reference:
+Liu, Ruolin, Ann E. Loraine, and Julie A. Dickerson. "Comparisons of computational methods 
+for differential alternative splicing detection using RNA-seq in plant systems." 
+BMC bioinformatics 15.1 (2014): 1.
+
+#####################################################################################
+#### 2. Setting up ASimulator
+##################################################################################### 
+
+For running ASimulator, the following software must be installed:
+
+1. Python 2.7+ (but not 3.0+). If event type simulation is selected, also Python 3.4 will
+be required (for Suppa).
+2. Flux Simulator and Suppa (for event type simulation). ASimulator includes these 
+programs in src/, however they can also be obtained from: http://sammeth.net/confluence/display/SIM/2+-+Download. Remember to unzip them.
+and: https://bitbucket.org/regulatorygenomicsupf/suppa.
+3. Python libraries: rpy2, SciPy (0.15.1), NumPy (1.11.0), Pandas (0.18.0), statsmodels (0.6.1), scikit-learn (0.16.1).
+4. HTSeq Python framework. Available in: http://www-huber.embl.de/users/anders/HTSeq
+5. GMAP/GSNAP (if alignment is required). Available in: http://research-pub.gene.com/gmap/
+6. If gtf is not provided by user or -n is specified, CuffLinks will be necessary.
+
+Remember to write the corresponding paths in the file myPaths.path. The explanation of 
+what must be included in each path is also included in that file. This file should be included
+in the master directory (from which ASimulator will be launched). Example paths are given
+to suggest a structure for the master directory. To make ASimulator executable everywhere
+simply write on terminal (including your master directory path):
+
+export PATH=$PATH:/Volumes/WINDOWS/Master_dir
+
+#####################################################################################
+#### 3. First approach to ASimulator
+#####################################################################################
+
+A first look to ASimulator can be taken using the -h option (or not giving input 
+arguments):
+
+usage: ASimulator.sh [-hn] [-e simpleEvents | complexEvents | allEvents] [--gtf] 
+[-t numberOfASgenes] [-r numberOfReplicates] [--palt1 paltRatio] [--palt2 paltRatio] 
+[-m meanbasecoverage] [--gsnap fullcDNAlibrary] --group1 identifierGroup1 
+--group2 identifierGroup2
+Authors: Carmen Bravo, Carlos de Lannoy, Emma Houben.
+Email: assemblytoolkuleuven@gmail.com
+Github: https://github.com/ASsemblytool/ASsembly
+Version: 1.0
+  -e simpleEvents | complexEvents | allEvents			specify which genes will be 
+  														differentially spliced according 
+  														to event type. Default is random 
+  														selection.
+  --group1 identifierGroup1								(mandatory) specify identifier of
+  														group 1.
+  --group2 identifierGroup2								(mandatory) specify identifier of 
+  														group 2.
+  --gsnap fullcDNAlibrary 								turn on gsnap alignment (cDNA 
+  														library file must be provided as 
+  														input). Default is false.
+  --gtf													create gtf annotation. Default is
+  														false.
+  -h													display help.
+  -m meanbasecoverage									specify mean base coverage. Default
+  														is 25.
+  -n													produce an incomplete annotation 
+  														file for novel discovery testing. 
+  														Default is false.
+  --palt1 paltRatio										specify PALT ratio of group 1. 
+  														Default is 0.2.
+  --palt2 paltRatio										specify PALT ratio of group 2. 
+  														Default is 0.6.
+  -r numberOfReplicates									specify number of biological 
+  														replicates. Default is 3.
+  -t numberOfASgenes									specify number of genes to be 
+  														differentially spliced between 
+  														groups if random selection is 
+  														chosen. Default is 2000. 
+
+Note that Flux Simulator parameters will be set in myPara.par file. A description of these
+parameters is included there. 
+
+The mandatory arguments for ASimulator are the prefixes of the two condition groups. For example,
+if the conditions are control and treatment, we should specify --group1 control --group2 treatment.
+These prefixes MUST be used in the bam files too, e.g. control_1.bam, control_2.bam,
+treatment_1.bam, treatment_2.bam. Note that at least two replicates per condition are needed.
+
+First, ASimulator will remove those reads that do not map to potentially alternatively spliced
+genes or whose mate is unmapped. Note that some aligners, as TopHat, generate inconsistencies 
+between the flag and MRNM field. The removal of unpaired reads is then done according to
+both the flag and the MRNM value. Information about the alternatively spliced genes regions
+is saved as an intermediate file.
+
+If specified, ASimulator can generate the GTF file required for Flux Simulator (-gtf) at the
+given path. If not, ASimulator assumes that the user is providing it.
+
+By default, ASimulator will randomly select N (2000 if not specified) potentially alternatively
+spliced genes. It will generate gene-level fragment counts, following a Negative Binomial
+distribution, for the two given groups based on the real experimental data. The number
+of replicates per group can be also selected (by default, 3). The list of the
+genes that will be differentially spliced will be saved as DiffASgenes.txt in the master
+directory.
+
+Next, Flux Simulator will be used to generate synthetic reads. Note that the PALT ratio
+controls the level of differential splicing in the simulation. PALT, whose range is from 
+0 − 1, represents the relative abundances of alternative isoforms for given genes.
+For multi-transcript genes, one transcript is randomly chosen as an alternative isoform
+while the rest of isoforms remains as standard isoforms across conditions. For each of 
+the given genes, all standard isoforms have relative abundances which sum to 1 − PALT.
+By default, PALT is set to 0.2 for the first group (control) and 0.6 for the second 
+(treatment), which simulates an intermediate differential splicing. By lowering or increasing
+PALT for the second group (e.g 0.4 and 0.8), the user can decrease or increase the level
+of differential splicing. The lower, the more difficult will be to spot differential
+splicing. 
+
+As output, simulated fastq and bed files will be generated. For alignment, GMAP/GSNAP
+is highly recommended, since it provides an option to generate and use a splice sites 
+database given full length cDNA sequences. If --gsnap is specified, this file must be provided.
+
+#####################################################################################
+#### 4. Event type simulation
+#####################################################################################
+
+One interesting feature of ASimulator is its ability to simulate according to event type.
+Using '-e simpleEvents | complexEvents | allEvents' the user can choose to simulate according
+to these event types. Simple events are Exon Skipping (SE), Intron Retention (RI) and 
+Alternative 3' or 5' Splice Sites (A3/A5). Complex events are Mutually Exclusive Exons (MX),
+Alternative First/Last Exons (AF/AL) and combinations of events. Using the GTF annotation,
+Suppa can identify and classify the different types of events. A GTF file (with a track header)
+to load into the UCSC genome browser to visualize the different events and an ioe file 
+that shows the relationship between each event and the transcripts with that particular event
+are returned by Suppa.
+
+In order to make ASsembly more efficient, ASsimulator selects genes with only two transcripts
+to link the gene id with the event type. The gene id, type of event and number of transcripts
+is provided in DiffASgenes.txt when this option is selected.
+
+#####################################################################################
+#### 5. Novel isoform discovery
+#####################################################################################
+
+Simulations for testing the novel splicing events discovery capacity of the methods can
+be also run. For this purpose, the user has to include the option -n. This will generate
+an incomplete annotation file, in which only the first annotated transcript for the
+selected differentially spliced genes are preserved. This annotation file can be provided
+to the methods to check how many of the events are they able to recover.
+
+#####################################################################################
+#### 6. Sequencing options and number of replicates
+#####################################################################################
+
+The user can modify the sequencing parameters in myPara.par file. An explanation of 
+their meaning is included on that file. Note, however, that the mean base coverage (a.k.a read depth)
+can be directly specified when calling ASimulator (-m meanbasecoverage). It refers to the average 
+number of times a single base is read during a sequencing run. If the coverage is 25 X 
+(default), this means that on average each base was sequenced 25 times. The more frequently
+a base is sequenced, the more reliable a base is called, resulting in better quality of the data.
+
+On the other hand, the user can specify the number of replicates that are required by using
+the option -r numberOfReplicates. By default, ASimulator will generate 3 replicates. 
+
+#####################################################################################
+#### 7. Alignment with GMAP/GSNAP
+#####################################################################################
+
+The alignment against a reference genome is a critical step in the simulation. ASimulator
+includes the option --gsnap fullcDNAlibrary, which will use gmap/gsnap for the alignment of the
+fasta files generated by flux Simulator. When selected, GMAP uses the full cDNA library to
+generate a database of known splice sites, which will make the alignment more precise. Results
+are given in bam format.
+
+Note that though gsnap can align reads with high accuracy, it can be computationally expensive.
+For this reason, the default of ASimulator is not to do alignments and give fasta files as result.
+These fasta files must be aligned by the user, who will have to take into account the 
+quality of the aligner to find splice sites to get reliable results from ASsembly. STAR
+is recommended as an alternative aligner (less sensitive, but much faster).
+
+
+#####################################################################################
+#### ASimulator (v1.0): Simulation of Differential Alternative Splicing 
+####Authors: Carmen Bravo, Carlos de Lannoy, Emma Houben
+####Email: assemblytoolkuleuven@gmail.com
+####Github: https://github.com/ASsemblytool/ASsembly
+#### 13-11-2016, Master of Bioinformatics, KU Leuven
+#####################################################################################

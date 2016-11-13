@@ -1,0 +1,162 @@
+# ASimulator (v1.0): Simulation of Differential Alternative Splicing 
+# Authors: Carmen Bravo, Carlos de Lannoy, Emma Houben
+# Email: assemblytoolkuleuven@gmail.com
+# Github: https://github.com/ASsemblytool/ASsembly
+
+#####################################################################################
+#### FLUX SIMULATOR PARAMETERS
+#####################################################################################
+
+# The following parameters must be defined for the functioning of Flux Simulator:
+
+# 1. File locations for the gtf annotation file and the reference genome:
+
+REF_FILE_NAME	/Volumes/WINDOWS/Master_dir/Annotation/TAIR10_GTF_genes.gtf
+GEN_DIR	/Volumes/WINDOWS/Master_dir/RefGenome/
+
+# 2. The Profile (.PRO) format is designed to describe the simulated characteristics of 
+# each transcript from the reference annotation, one per line. After each step of a 
+# simulation run, tab-separated are added to the file. In ASimulator, this specified name will
+# be use for the temporary file while the simulation is running. At the end we will obtain 
+# files of the form control_1.pro.
+
+PRO_FILE_NAME	toy.pro
+
+# 3. The format of LIB (Simulated Library) files is simple and condenses the information 
+# needed to describe a fragment (RNA or cDNA) of an original transcripts. Each line 
+# corresponds to one such fragments and in 3 tab-delimited fields the start, end in the 
+# spliced sequence (exonic) of the transcript with transcript_id of the original annotation.
+# In ASimulator, this specified name will be use for the temporary file while the simulation 
+# is running. At the end we will obtain files of the form control_1. LIB_FILE_NAME is
+# the file from which fragments are read, and to which new fragments are written.
+
+LIB_FILE_NAME	TOY
+
+# 4. Set seed to reproduce simulation.
+
+SEED	123456
+
+# 5. Number of expressed RNA molecules simulated
+
+NB_MOLECULES    15000000
+
+# 6. Transcript modifications. 
+
+# a. TSS_MEAN refers to the rate of the exponential for deviation of simulated transcription 
+# starts from annotated transcription start point. It can be set to NaN (i.e., "not a number")
+# to deactivate simulated transcription start variability.
+
+TSS_MEAN	100
+
+# b. POLYA_SCALE is a scale parameter of the Weibull distribution describing poly-A tail lengths. It can 
+# be set to NaN to deactivate simulated poly-A tails. 
+
+POLYA_SCALE     200
+
+# c. POLYA_SHAPE is a shape parameter of the Weibull distribution describing poly-A tail 
+# lengths, it can be set to Nan to deactivate simulated poly-A tails.
+
+POLYA_SHAPE     1.5
+
+# 7. Fragmentation.
+
+# a. FRAG_SUBSTRATE selects whether fragmentation is carried out before (RNA) or after 
+# (DNA) reverse transcription.
+
+FRAG_SUBSTRATE	RNA
+
+# b. FRAG_METHOD selects the nebulization (NB), uniform-random fragmentation (UR), or 
+# enzymatic digestion (EZ) model.
+
+FRAG_METHOD	UR
+
+# c. For RNA hydrolysis model parameters, more information can be found in:
+# http://sammeth.net/confluence/display/SIM/4.3.1+-+RNA+Hydrolysis
+
+FRAG_UR_ETA	350
+FRAG_UR_D0	1
+FRAG_UR_DELTA	NaN
+
+# d. If RNA nebulization is selected, comment 6.c parameters and add this. More info in
+# http://sammeth.net/confluence/display/SIM/4.3.2+-+DNA+Nebulization
+
+#FRAG_NB_LAMBDA	600
+#FRAG_NB_M	5
+
+# 8. Reverse transcription.
+
+# a. Activate reverse transcription.
+
+RTRANSCRIPTION	YES
+
+# b. RT_PRIMER chooses random (RH) or poly-dT primers for first strand synthesis.
+
+RT_PRIMER	RH
+
+# c. RT_MOTIF to introduce sequence bias.
+
+# RT_MOTIF	default
+
+# d. Avoid missing bases.
+
+RT_LOSSLESS	YES
+
+# e. The minimum/maximum (RT_MIN/RT_MAX) stretch that is polymerized by the reverse 
+# transcriptase enzyme.
+
+RT_MIN	500
+RT_MAX	5500
+
+# 9. Amplification parameters
+# a. PCR_DISTRIBUTION is a parameter specifies the name of a PCR distribution file, 
+# or 'default' to use a distribution with 15 rounds and 20 bins. A value of 'none' 
+# disables PCR amplification.
+
+PCR_DISTRIBUTION	default
+
+# b. GC_MEAN  is the mean of duplication probability distribuiton with respect to GC 
+# content; the distribution is approximated by a normal distribution.
+
+GC_MEAN	NaN
+
+# c. FILTERING switches filtering for fragment sizes on/off.
+
+FILTERING	YES
+
+# d. SIZE_DISTRIBUTION specifies the probability distribution over fragment sizes to be 
+# retained in the final set.
+
+SIZE_DISTRIBUTION	N(350,20)
+
+# e. SIZE_SAMPLING identifies the method used for sub-sampling fragments: either 
+# rejection-sampling (RJ), a variant of rejection-sampling with a minimal rejection 
+# rate (so-called acceptance sampling, AC), or the well known Metropolis-Hastings 
+# algorithm (MH) can be selected.
+
+#SIZE_SAMPLING	MH
+
+# 10. Sequencing parameters.
+# a. Number of reads sequenced
+
+READ_NUMBER	15000000
+
+# b. Length of the reads. ASimulator works better if long reads are generated, in order to
+# cross the higher amount of exon-exon junctions.
+
+READ_LENGTH	100
+
+# c. Activate paired end reads.
+
+PAIRED_END	YES
+
+# d. Output to fasta.
+
+FASTA	YES
+
+# e. Path to the file with the error model. With the values '35' or '76', default error
+# models are provided for the corresponding read lengths, otherwise the path to a custom 
+# error model file is expected. 
+
+ERR_FILE	76
+
+# For more information, please visit: http://sammeth.net/confluence/display/SIM/Home
