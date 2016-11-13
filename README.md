@@ -1,5 +1,7 @@
 # ASsembly
 
+(Alpha phase)
+
 ASsembly is a tool for the assembly of the results of several methods
 for detecting differential splicing. These methods tend to find different differential
 splicing events, with little overlap within their results. Some methods work well for 
@@ -20,3 +22,7 @@ lists found by the methods. Methods are then run on the original data and these 
 are used to identify how many of the differential spliced genes found can be trusted. 
 
 More information can be found in the tools documentation.
+
+# Authors: Carmen Bravo, Carlos de Lannoy, Emma Houben
+# Email: assemblytoolkuleuven@gmail.com
+# Github: https://github.com/ASsemblytool/ASsembly
