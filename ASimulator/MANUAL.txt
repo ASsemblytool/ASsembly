@@ -48,8 +48,8 @@ For running ASimulator, the following software must be installed:
 1. Python 2.7+ (but not 3.0+). If event type simulation is selected, also Python 3.4 will
 be required (for Suppa).
 2. Flux Simulator and Suppa (for event type simulation). ASimulator includes these 
-programs in src/, however they can also be obtained from: http://sammeth.net/confluence/display/SIM/2+-+Download. Remember to unzip them.
-and: https://bitbucket.org/regulatorygenomicsupf/suppa.
+programs in src/, however they can also be obtained from: http://sammeth.net/confluence/display/SIM/2+-+Download.
+and: https://bitbucket.org/regulatorygenomicsupf/suppa. Remember to unzip them.
 3. Python libraries: rpy2, SciPy (0.15.1), NumPy (1.11.0), Pandas (0.18.0), statsmodels (0.6.1), scikit-learn (0.16.1).
 4. HTSeq Python framework. Available in: http://www-huber.embl.de/users/anders/HTSeq
 5. GMAP/GSNAP (if alignment is required). Available in: http://research-pub.gene.com/gmap/
@@ -79,34 +79,34 @@ Email: assemblytoolkuleuven@gmail.com
 Github: https://github.com/ASsemblytool/ASsembly
 Version: 1.0
   -e simpleEvents | complexEvents | allEvents			specify which genes will be 
-  														differentially spliced according 
-  														to event type. Default is random 
-  														selection.
-  --group1 identifierGroup1								(mandatory) specify identifier of
-  														group 1.
-  --group2 identifierGroup2								(mandatory) specify identifier of 
-  														group 2.
-  --gsnap fullcDNAlibrary 								turn on gsnap alignment (cDNA 
-  														library file must be provided as 
-  														input). Default is false.
-  --gtf													create gtf annotation. Default is
-  														false.
-  -h													display help.
-  -m meanbasecoverage									specify mean base coverage. Default
-  														is 25.
-  -n													produce an incomplete annotation 
-  														file for novel discovery testing. 
-  														Default is false.
-  --palt1 paltRatio										specify PALT ratio of group 1. 
-  														Default is 0.2.
-  --palt2 paltRatio										specify PALT ratio of group 2. 
-  														Default is 0.6.
-  -r numberOfReplicates									specify number of biological 
-  														replicates. Default is 3.
-  -t numberOfASgenes									specify number of genes to be 
-  														differentially spliced between 
-  														groups if random selection is 
-  														chosen. Default is 2000. 
+  														                    differentially spliced according 
+  														                    to event type. Default is random 
+  														                    selection.
+  --group1 identifierGroup1								        (mandatory) specify identifier of
+  														                    group 1.
+  --group2 identifierGroup2								        (mandatory) specify identifier of 
+  														                    group 2.
+  --gsnap fullcDNAlibrary 								        turn on gsnap alignment (cDNA 
+  														                    library file must be provided as 
+  														                    input). Default is false.
+  --gtf													                  create gtf annotation. Default is
+  														                    false.
+  -h													                    display help.
+  -m meanbasecoverage									            specify mean base coverage. Default
+  														                    is 25.
+  -n													                    produce an incomplete annotation 
+  														                    file for novel discovery testing. 
+  														                    Default is false.
+  --palt1 paltRatio										            specify PALT ratio of group 1. 
+  														                    Default is 0.2.
+  --palt2 paltRatio										            specify PALT ratio of group 2. 
+  														                    Default is 0.6.
+  -r numberOfReplicates									          specify number of biological 
+  														                    replicates. Default is 3.
+  -t numberOfASgenes									            specify number of genes to be 
+  														                    differentially spliced between 
+  														                    groups if random selection is 
+  														                    chosen. Default is 2000. 
 
 Note that Flux Simulator parameters will be set in myPara.par file. A description of these
 parameters is included there. 
