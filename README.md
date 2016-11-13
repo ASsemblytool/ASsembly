@@ -1,6 +1,6 @@
 # ASsembly
 
-(Alpha phase)
+<em>(Alpha phase)</em>
 
 ASsembly is a tool for the assembly of the results of several methods
 for detecting differential splicing. These methods tend to find different differential
