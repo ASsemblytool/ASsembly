@@ -12,7 +12,7 @@ confidence differential splicing events among them.
 ASimulator is a tool for simulating differential splicing between two given conditions. 
 These simulations can be used for testing the accuracy of differential splicing methods
 for finding certain alternative splicing event types (simple and complex) and novel isoforms;
-and checking their robustness against diffenrent isoform ratios between the samples, 
+and checking their robustness against different isoform ratios between the samples, 
 quality of sequencing and number of replicates.
 
 Given the simulated files, ASsembly uses a GSEA approach to find high confidence thresholds
