@@ -18,7 +18,7 @@ ASimulator is part of ASsembly, a tool for the assembly of the results of severa
 for detecting differential splicing. These methods tend to find different differential
 splicing events, with little overlap within their results. Some methods work well for 
 finding certain types of events but not others, and not all of them are good when novel 
-isoforms appear (Liu et al., 2014). ASsembly aims to unify this results and find high 
+isoforms appear (Liu et al., 2014). ASsembly aims to unify these results and find high 
 confidence differential splicing events among them.
 
 Given the simulated files, ASsembly uses a GSEA approach to find high confidence thresholds
