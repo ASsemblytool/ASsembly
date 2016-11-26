@@ -133,7 +133,7 @@ else
 fi
 
 
-8. Generate event list if specified and simulate biological replicates
+# 8. Generate event list if specified and simulate biological replicates
 if [ "$eventTypeflag" == "" ]
 	then
 		cat $INT/1-ASgenomeReg.bed | cut -f4 | sort | uniq > $INT/3-allASgenesGenome.txt
