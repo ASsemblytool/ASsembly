@@ -184,7 +184,7 @@ elif [ "$eventTypeflag" == "complexEvents" ]
 		python $FUNCTIONS/complexEvents.py $INT/2-SuppaEvents/*.ioe -gff $GFF_ANN -o $INT/3-complexEventsGenome.txt
 		sort $INT/3-complexEventsGenome.txt -o $INT/3-complexEventsGenome.txt
 		echo "Complex events list generated."
-				if [ -d "$INT/4-CalNBCounts" ]; 
+		if [ -d "$INT/4-CalNBCounts" ]; 
 			then
 				rm -r "$INT/4-CalNBCounts"
 		fi
@@ -207,7 +207,7 @@ elif [ "$eventTypeflag" == "allEvents" ]
 		python $FUNCTIONS/allEvents.py $INT/2-SuppaEvents/*.ioe -gff $GFF_ANN -o $INT/3-allEventsGenome.txt
 		sort $INT/3-allEventsGenome.txt -o $INT/3-allEventsGenome.txt
 		echo "Event type list generated."
-				if [ -d "$INT/4-CalNBCounts" ]; 
+		if [ -d "$INT/4-CalNBCounts" ]; 
 			then
 				rm -r "$INT/4-CalNBCounts"
 		fi
