@@ -18,7 +18,7 @@ quality of sequencing and number of replicates.
 Given the simulated files, ASsembly uses a GSEA approach to find high confidence thresholds
 (e.g. for specific event types or novel isoform discovery) for each method. The simulated 
 gene lists are used as reference gene sets against the ranked differentially spliced genes
-lists found by the methods. Methods are then run on the original data and these thresholds
+lists found by the methods. Following, the tool builds ensemble models (a linear logistic regression and a classification tree). Methods are then run on the original data and these thresholds and models
 are used to identify how many of the differential spliced genes found can be trusted. 
 
 More information can be found in the tools documentation.
