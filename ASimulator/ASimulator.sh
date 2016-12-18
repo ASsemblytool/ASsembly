@@ -40,7 +40,7 @@ replflag=3
 gsnapflag=''
 meanbasecoverage=25
 fgflag=''
-fgflag=''
+sgflag=''
 
 # 2. Parse arguments
 # NOTE: MAC getopts does not accept long options. The solution is to convert them to 
@@ -115,7 +115,7 @@ for file in $BAM_FILES/*.bam
 		samtools view -b -f 0x2 -L $INT/1-ASgenomeReg.bed $file | samtools view -h | grep -v '\t\*\t' | samtools view -bS - > ${file/$BAM_FILES/$FILT_BAMFILES}
 	done  
 echo "Bam files have been filtered according to alternatively spliced genes regions."
-# 
+
 # 6.a First group files
 fg=$(ls $FILT_BAMFILES | grep "$fgflag" | awk '$0="'$FILT_BAMFILES'/"$0' | tr "\n" " ") 
 # 6.b Second group files
@@ -136,7 +136,7 @@ fi
 # 8. Generate event list if specified and simulate biological replicates
 if [ "$eventTypeflag" == "" ]
 	then
-		cat $INT/1-ASgenomeReg.bed | cut -f4 | sort | uniq > $INT/3-allASgenesGenome.txt
+		cat $INT/1-ASgenomeReg.bed | cut -f4 | sort | uniq > $INT/1-allASgenesGenome.txt
 		echo "No event type simulation specified, proceed with random selection"
 		if [ -d "$INT/4-CalNBCounts" ]; 
 			then
