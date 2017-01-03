@@ -55,7 +55,7 @@ for(i in 1:k){
     levels(dredgeObj[,n]) = c("+","-")
     dredgeObj[which(is.na(dredgeObj[,n])),n] = "-"
   }
-  bestModVars = names(dredgeObj[,which(dredgeObj=="+")])
+  bestModVars = names(dredgeObj[,c(1,which(dredgeObj=="+"))])[-1]
   mod = glm(paste0("hits~",paste(bestModVars,collapse="+")),family=binomial(link="logit"),data=genes)
   
   # Perform ROC analysis

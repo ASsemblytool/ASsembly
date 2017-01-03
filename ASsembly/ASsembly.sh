@@ -14,11 +14,10 @@ source ASsembly_defaults.conf
 FIND_THRESHOLDS=false
 
 # Override defaults with given options
-while getopts "c:t:g:o:p:Th" opt; do
+while getopts "c:t:o:p:Th" opt; do
 case $opt in
 	c) CONTROL=$OPTARG;;
 	t) TREATMENT=$OPTARG;;
-	g) GTF=$OPTARG;;
 	o) OUTPUT_PATH=$OPTARG;;
 	p)
 	echo "Loading supplied config file"
